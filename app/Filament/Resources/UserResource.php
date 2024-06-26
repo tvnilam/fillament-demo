@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Models\User;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -51,6 +52,10 @@ class UserResource extends Resource
                         'receiver' => 'Receiver',
                         'admin' => 'Admin'
                     ]),
+                FileUpload::make('image')
+                    ->disk('public')
+                    ->directory('form-image')
+                    ->visibility('private')
             ]);
     }
     
