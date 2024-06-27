@@ -37,7 +37,6 @@ class ListUsers extends ListRecords
 
                     Notification::make()
                         ->title('user imported')
-                       // ->message('user imported successfully')
                         ->send();
                 })
         ];
