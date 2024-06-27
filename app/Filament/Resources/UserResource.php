@@ -14,6 +14,9 @@ use Filament\Tables\Table;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\TernaryFilter;
+use App\Exports\UserExport;
+use Filament\Tables\Actions\BulkAction;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserResource extends Resource
 {
@@ -106,6 +109,12 @@ class UserResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    BulkAction::make('export')
+                        ->label('Export')
+                       /// ->icon('heroicon-o-download')
+                        ->action(function () {
+                            return Excel::download(new UserExport(), 'users.xlsx');
+                        }),
                 ]),
             ]);
     }
