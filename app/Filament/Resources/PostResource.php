@@ -2,14 +2,12 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\PostResource\Pages;
-use App\Filament\Resources\PostResource\RelationManagers;
 use App\Models\Post;
-use App\Models\User; // Import the User model
+use App\Filament\Resources\PostResource\Pages;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -43,6 +41,12 @@ class PostResource extends Resource
                     ->validationMessages([
                         'required' => 'The Description field is required.',
                     ]),
+                Forms\Components\FileUpload::make('attachments')
+                    ->label('Attachments')
+                    ->multiple()
+                    ->disk('public')
+                    ->directory('post/attachments')
+                    ->preserveFilenames(),
             ]);
     }
 
@@ -56,6 +60,14 @@ class PostResource extends Resource
                     ->label('Name'),
                 Tables\Columns\TextColumn::make('description')
                     ->label('Description'),
+                Tables\Columns\TextColumn::make('attachments')
+                    ->label('Attachments')
+                    ->formatStateUsing(function ($record) {
+                        return $record->attachments->map(function ($attachment) {
+                            return asset('storage/post/attachments/' . $attachment->name);
+                        })->toArray();
+                    })
+                    ->view('components.tables.multiple-images-column'),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
