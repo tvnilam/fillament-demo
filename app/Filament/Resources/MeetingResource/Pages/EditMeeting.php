@@ -18,24 +18,5 @@ class EditMeeting extends EditRecord
             
         ];
     }
-
-    // protected function mutateFormDataBeforeSave(array $data): array
-    // {
-    //     $this->userIds = $data['user_ids'] ?? [];
-    //     unset($data['user_ids']);
-        
-    //     return $data;
-    // }
-
-    // protected function afterSave(): void
-    // {
-    //     // Retrieve the current meeting record
-    //     $meeting = $this->record;
-    
-    //     // Check if there are selected user IDs from the form input
-    
-    //     // Sync the user IDs to the pivot table
-    //     $meeting->users()->sync($this->userIds);
-    // }
     
 }

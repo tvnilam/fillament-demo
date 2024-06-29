@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TimePicker;
-use  App\Filament\Resources\MeetingResource\RelationManagers\UsersRelationManager;
 use App\Models\User;
 
 class MeetingResource extends Resource
@@ -35,6 +34,11 @@ class MeetingResource extends Resource
                 // ->options(User::all()->pluck('name', 'id')->toArray())
                 // ->default(fn ($record) => $record ? $record->users->pluck('id')->toArray() : [])
                 // ->searchable(),
+                Select::make('users')
+                ->relationship('users', 'name')
+                ->multiple()
+                ->preload()
+                ->searchable(),
                 Forms\Components\DatePicker::make('date'),
                 Forms\Components\TimePicker::make('time'),
                 Forms\Components\TextInput::make('location')
@@ -81,7 +85,7 @@ class MeetingResource extends Resource
     public static function getRelations(): array
     {
         return [
-            UsersRelationManager::class
+           //
         ];
     }
 
@@ -92,5 +96,14 @@ class MeetingResource extends Resource
             'create' => Pages\CreateMeeting::route('/create'),
             'edit' => Pages\EditMeeting::route('/{record}/edit'),
         ];
+    }
+
+    public static function saved(Form $form, $record)
+    {
+        $userIds = $form->getState()['users'] ?? [];
+
+        if (!empty($userIds)) {
+            $record->users()->sync($userIds);  // Using sync to update the relationship
+        }
     }
 }
