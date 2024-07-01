@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('name')->nullable();
             $table->string('description')->nullable();
-            $table->string('attachments')->nullable();
+            $table->json('attachments')->nullable(); 
             $table->timestamps();
             $table->softDeletes();
         });

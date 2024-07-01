@@ -11,7 +11,6 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Tables\Columns\ImageColumn;
 
 class PostResource extends Resource
 {
@@ -47,7 +46,7 @@ class PostResource extends Resource
                     ->multiple()
                     ->disk('public')
                     ->directory('post/attachments')
-                 //   ->preserveFilenames(),
+                    ->preserveFilenames(),
             ]);
     }
 
@@ -61,7 +60,14 @@ class PostResource extends Resource
                     ->label('Name'),
                 Tables\Columns\TextColumn::make('description')
                     ->label('Description'),
-                ImageColumn::make('attachments'),
+                Tables\Columns\TextColumn::make('attachments')
+                    ->label('Attachments')
+                    ->formatStateUsing(function ($record) {
+                        return $record->map(function ($attachment) {
+                            return asset('storage/post/attachments/' . $attachment);
+                        })->toArray();
+                    })
+                    ->view('components.tables.attachments-column'),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
@@ -81,9 +87,7 @@ class PostResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array
