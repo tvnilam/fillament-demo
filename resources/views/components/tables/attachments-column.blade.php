@@ -8,11 +8,11 @@
                 @endphp
 
                 @if (in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif']))
-                    <a href="{{ $fileUrl }}" target="_blank" rel="noopener noreferrer">
-                        <img src="{{ $fileUrl }}" alt="Attachment" class="w-24 h-24 object-cover"/>
-                    </a>
+                 
+                    <img src="{{ $fileUrl }}" alt="Attachment"  style="width: 6rem;height: 6rem;object-fit: cover;object-position: center; border-radius: 10px; min-width: 6rem; min-height: 6rem;" />
+                   
                 @elseif (in_array($fileExtension, ['mp4', 'webm', 'ogg']))
-                    <video class="w-24 h-24 object-cover" controls>
+                    <video controls style="width: 6rem;height: 6rem;object-fit: cover; object-position: center; border-radius: 10px;     min-width: 6rem; min-height: 6rem;">
                         <source src="{{ $fileUrl }}" type="video/{{ $fileExtension }}">
                         Your browser does not support the video tag.
                     </video>
