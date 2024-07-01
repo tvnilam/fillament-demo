@@ -14,14 +14,13 @@ class Post extends Model
 
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'attachments' => 'array',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function attachments()
-    {
-        return $this->hasMany(PostAttachment::class);
     }
 }
 
