@@ -74,6 +74,7 @@ class MeetingResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -94,6 +95,7 @@ class MeetingResource extends Resource
         return [
             'index' => Pages\ListMeetings::route('/'),
             'create' => Pages\CreateMeeting::route('/create'),
+            'view' => Pages\ViewMeeting::route('/{record}'),
             'edit' => Pages\EditMeeting::route('/{record}/edit'),
         ];
     }
