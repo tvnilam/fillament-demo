@@ -24,25 +24,25 @@ class PostResource extends Resource
             ->schema([
                 Forms\Components\BelongsToSelect::make('user_id')
                     ->relationship('user', 'name')
-                    ->label('User')
+                    ->label(__('messages.user'))
                     ->required()
                     ->validationMessages([
                         'required' => 'The User field is required.',
                     ]),
                 Forms\Components\TextInput::make('name')
-                    ->label('Name')
+                    ->label(__('messages.name'))
                     ->required()
                     ->validationMessages([
                         'required' => 'The Name field is required.',
                     ]),
                 Forms\Components\Textarea::make('description')
-                    ->label('Description')
+                    ->label(__('messages.description'))
                     ->required()
                     ->validationMessages([
                         'required' => 'The Description field is required.',
                     ]),
                 Forms\Components\FileUpload::make('attachments')
-                    ->label('Attachments')
+                    ->label(__('messages.attachments'))
                     ->multiple()
                     ->disk('public')
                     ->directory('post/attachments')
@@ -55,19 +55,19 @@ class PostResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('user.name')
-                    ->label('User'),
+                    ->label(__('messages.user')),
                 Tables\Columns\TextColumn::make('name')
-                    ->label('Name'),
+                    ->label(__('messages.name')),
                 Tables\Columns\TextColumn::make('description')
-                    ->label('Description'),
+                    ->label(__('messages.description')),
                 Tables\Columns\TextColumn::make('attachments')
-                    ->label('Attachments')
+                    ->label(__('messages.attachments'))
                     ->formatStateUsing(function ($record) {
-                        return $record->attachments->map(function ($attachment) {
-                            return asset('storage/post/attachments/' . $attachment->name);
+                        return $record->map(function ($attachment) {
+                            return asset('storage/post/attachments/' . $attachment);
                         })->toArray();
                     })
-                    ->view('components.tables.multiple-images-column'),
+                    ->view('components.tables.attachments-column'),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
@@ -87,9 +87,7 @@ class PostResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array
