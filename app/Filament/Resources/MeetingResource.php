@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TimePicker;
+use App\Filament\Resources\MeetingResource\Pages\CalendarPage;
 use App\Models\User;
 
 class MeetingResource extends Resource
@@ -97,6 +98,7 @@ class MeetingResource extends Resource
             'create' => Pages\CreateMeeting::route('/create'),
             'view' => Pages\ViewMeeting::route('/{record}'),
             'edit' => Pages\EditMeeting::route('/{record}/edit'),
+            'calendar' => CalendarPage::route('/{record}/calendar'), 
         ];
     }
 
