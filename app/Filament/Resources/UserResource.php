@@ -13,10 +13,10 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Enums\FiltersLayout;
-use Filament\Tables\Filters\TernaryFilter;
 use App\Exports\UserExport;
 use Filament\Tables\Actions\BulkAction;
 use Maatwebsite\Excel\Facades\Excel;
+use Filament\Tables\Filters\Filter;
 
 class UserResource extends Resource
 {
@@ -62,7 +62,7 @@ class UserResource extends Resource
                     ->visibility('private')
             ]);
     }
-    
+
     public static function table(Table $table): Table
     {
         return $table
@@ -86,15 +86,6 @@ class UserResource extends Resource
                     ->sortable(),
             ])
             ->filters([
-                TernaryFilter::make('is_active')
-                    ->label('Status')
-                    ->placeholder('All')
-                    ->trueLabel('Active')
-                    ->falseLabel('Inactive')
-                    ->queries(
-                        true: fn ($query) => $query->where('is_active', true),
-                        false: fn ($query) => $query->where('is_active', false),
-                    ),
                 SelectFilter::make('type')
                     ->options([
                         'sender' => 'Sender',
@@ -102,8 +93,15 @@ class UserResource extends Resource
                         'admin' => 'Admin',
                     ])
                     ->label('User Type'),
-           ], layout: FiltersLayout::AboveContent)
-           ->actions([
+                Filter::make('is_active')
+                    ->label('Status')
+                    ->toggle()
+                    ->default(true)
+                    ->query(function ($query, $state) {
+                        return $query->where('is_active', $state ? 1 : 0);
+                    }),
+            ], layout: FiltersLayout::AboveContent)
+            ->actions([
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -111,7 +109,6 @@ class UserResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                     BulkAction::make('export')
                         ->label('Export')
-                       /// ->icon('heroicon-o-download')
                         ->action(function () {
                             return Excel::download(new UserExport(), 'users.xlsx');
                         }),
